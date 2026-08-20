@@ -16,7 +16,7 @@ cd browser-firefox-mcp
 uv venv && source .venv/bin/activate
 uv pip install -e .
 playwright install --with-deps firefox
-python -m mcp.server  # test: starts JSON-RPC on stdio
+python server.py  # test: starts JSON-RPC on stdio
 ```
 
 Or use the automated installer:
@@ -34,7 +34,7 @@ Add to your cyberstrikeai configuration (typically `~/.config/cyberstrikeai/conf
   "mcp_servers": {
     "firefox-browser": {
       "command": "python",
-      "args": ["-m", "mcp.server"],
+      "args": ["server.py"],
       "cwd": "/home/$USER/cyberstrike/browser-firefox-mcp"
     }
   }
@@ -116,7 +116,7 @@ cyberstrikeai agent
        │
        │  MCP JSON-RPC (stdio)
        ▼
-  python -m mcp.server   ← FastMCP, asyncio event loop
+  server.py          ← 同步 MCP stdio 服务（无 asyncio/trio 依赖）
        │
        ├── core/engine.py     → Playwright Firefox launcher
        ├── core/page.py       → Navigate / click / fill / screenshot

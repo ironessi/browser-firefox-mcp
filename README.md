@@ -19,7 +19,7 @@ cd browser-firefox-mcp
 uv venv && source .venv/bin/activate
 uv pip install -e .
 playwright install firefox
-python -m mcp.server  # or: browser-firefox-mcp
+python server.py  # or: browser-firefox-mcp
 ```
 
 ## Integration with cyberstrikeai
@@ -31,7 +31,7 @@ Add to your `~/.config/cyberstrikeai/config.json` (or equivalent):
   "mcp_servers": {
     "firefox-browser": {
       "command": "python",
-      "args": ["-m", "mcp.server"],
+      "args": ["server.py"],
       "cwd": "/path/to/browser-firefox-mcp"
     }
   }
@@ -46,8 +46,8 @@ The agent will automatically discover tools: `navigate`, `click`, `fill`, `scree
 
 ```
 ┌──────────────────┐     JSON-RPC (stdio)     ┌──────────────────┐
-│  cyberstrikeai   │ ◄──────────────────────► │  mcp/server.py   │
-│   (agent)        │                          │  (FastMCP)       │
+│  cyberstrikeai   │ ◄──────────────────────► │     server.py    │
+│   (agent)        │                          │ (MCP stdio)      │
 └──────────────────┘                          └────────┬─────────┘
                                                        │
                                           ┌────────────▼─────────┐
