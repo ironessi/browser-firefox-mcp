@@ -11,11 +11,20 @@ import logging
 import sys
 from typing import Any, Optional
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(name)s] %(levelname)s %(message)s",
-)
+LOG_PATH = "/tmp/browser-firefox-mcp.log"
+
+_file_handler = logging.FileHandler(LOG_PATH, mode="a", encoding="utf-8")
+_file_handler.setFormatter(logging.Formatter("%(asctime)s [%(name)s] %(levelname)s %(message)s"))
+
+_stderr_handler = logging.StreamHandler()
+_stderr_handler.setFormatter(logging.Formatter("%(asctime)s [%(name)s] %(levelname)s %(message)s"))
+
 logger = logging.getLogger("firefx-server")
+logger.setLevel(logging.INFO)
+logger.addHandler(_file_handler)
+logger.addHandler(_stderr_handler)
+
+logging.getLogger().setLevel(logging.INFO)
 
 # --- singleton runtime ------------------------------------------------------
 
@@ -831,4 +840,9 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        logger.exception("Fatal error in main")
+        _send_error(None, -32603, f"Fatal error: {e}")
+        raise
