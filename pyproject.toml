@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "browser-firefox-mcp"
+version = "0.1.0"
+description = "Security-focused Firefox browser MCP server for penetration testing agents"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=1.0.0",
+    "playwright>=1.45.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+]
+
+[project.scripts]
+browser-firefox-mcp = "mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["core", "mcp"]
