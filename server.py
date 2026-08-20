@@ -780,19 +780,25 @@ def _send_error(request_id: Optional[int], code: int, message: str) -> None:
     sys.stdout.flush()
 
 
-def main() -> None:
-    """Run the MCP server over stdio (sync, no asyncio needed)."""
-    logger.info("Starting firefx-browser MCP server")
-
-    # Initialize — send capabilities
-    _send_response(0, {
+def _handle_initialize() -> dict:
+    """Return MCP server capabilities."""
+    return {
         "protocolVersion": "2024-11-05",
+        "serverInfo": {
+            "name": "browser-firefox-mcp",
+            "version": "0.1.0",
+        },
         "capabilities": {
             "tools": {
                 "listChanged": False,
             },
         },
-    })
+    }
+
+
+def main() -> None:
+    """Run the MCP server over stdio (sync, no asyncio needed)."""
+    logger.info("Starting firefx-browser MCP server")
 
     while True:
         line = sys.stdin.readline()
@@ -808,9 +814,9 @@ def main() -> None:
 
         try:
             if method == "initialize":
-                # Already sent init above; this is just acknowledgment
-                pass
+                _send_response(rid, _handle_initialize())
             elif method == "notifications/initialized":
+                # No response required for notifications
                 pass
             elif method == "tools/list":
                 _send_response(rid, _handle_tools_list())
