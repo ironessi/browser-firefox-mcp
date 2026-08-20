@@ -4,6 +4,8 @@ __pycache__/
 dist/
 build/
 .venv/
+test_venv/
+venv/
 .env
 harness/runtime/
 harness/tmp/
